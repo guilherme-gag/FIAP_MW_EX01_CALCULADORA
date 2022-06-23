@@ -16,7 +16,7 @@ function updateDisplay(number) {
 }
 
 function decimal(){
-    if(display.textContent.length == 0)
+    if(newNumber)
     {
         updateDisplay('0,');
     }
