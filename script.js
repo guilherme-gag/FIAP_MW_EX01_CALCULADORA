@@ -1,6 +1,7 @@
 const display = document.querySelector('#display');
 const keys = document.querySelectorAll('[id*=key]');
 const operators = document.querySelectorAll('[id*=Operator]');
+const decimalKey = document.querySelector('#decimal');
 
 let newNumber = true;
 let operator;
@@ -8,11 +9,21 @@ let previousNumber;
 
 function updateDisplay(number) {
     if (newNumber) {
-        display.textContent = number;
+        display.textContent = number.toString().replace('.',',');
         newNumber = false;
     }
     else display.textContent += number;
 }
+
+function decimal(){
+    if(display.textContent.length == 0)
+    {
+        updateDisplay('0,');
+    }
+    else if (display.textContent.indexOf(',') ==-1) updateDisplay(',');
+}
+
+decimalKey.addEventListener('click',decimal);
 
 const insertNumber = ({ target }) =>
     updateDisplay(target.textContent);
@@ -22,13 +33,13 @@ keys.forEach(key => key.addEventListener('click', insertNumber));
 const selectOperator = (event) => {
     newNumber = true;
     operator = event.target.textContent;
-    previousNumber = display.textContent;
+    previousNumber = display.textContent.replace(',','.');
 }
 
 operators.forEach(operator => operator.addEventListener("click", selectOperator));
 
 const calculate = () => {
-    const actualNumber = display.textContent;
+    const actualNumber = display.textContent.replace(',','.');
     const result = eval(`${previousNumber}${operator}${actualNumber}`); //template string
     newNumber = true;
     updateDisplay(result);
